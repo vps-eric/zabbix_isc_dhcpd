@@ -1,0 +1,4 @@
+importlib-resources==5.1.0
+netaddr==0.8.0
+pypureomapi==0.8
+zipp==3.4.0
