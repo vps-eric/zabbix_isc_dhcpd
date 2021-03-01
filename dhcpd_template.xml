@@ -4,7 +4,7 @@
     <date>2019-09-12T15:27:30Z</date>
     <groups>
         <group>
-            <name>Dhcp</name>
+            <name>DHCP</name>
         </group>
     </groups>
     <templates>
@@ -14,17 +14,17 @@
             <description/>
             <groups>
                 <group>
-                    <name>Dhcp</name>
+                    <name>DHCP</name>
                 </group>
             </groups>
             <applications>
                 <application>
-                    <name>Dhcp Service</name>
+                    <name>DHCP Service</name>
                 </application>
             </applications>
             <items>
                 <item>
-                    <name>Dhcp service is running</name>
+                    <name>DHCP service is running</name>
                     <type>0</type>
                     <snmp_community/>
                     <snmp_oid/>
@@ -55,7 +55,7 @@
                     <inventory_link>0</inventory_link>
                     <applications>
                         <application>
-                            <name>Dhcp Service</name>
+                            <name>DHCP Service</name>
                         </application>
                     </applications>
                     <valuemap/>
@@ -85,7 +85,7 @@
             </items>
             <discovery_rules>
                 <discovery_rule>
-                    <name>Dhcp Ranges Discovery</name>
+                    <name>DHCP Ranges Discovery</name>
                     <type>0</type>
                     <snmp_community/>
                     <snmp_oid/>
@@ -148,7 +148,7 @@
                             <inventory_link>0</inventory_link>
                             <applications>
                                 <application>
-                                    <name>Dhcp Service</name>
+                                    <name>DHCP Service</name>
                                 </application>
                             </applications>
                             <valuemap/>
@@ -208,7 +208,7 @@
                             <inventory_link>0</inventory_link>
                             <applications>
                                 <application>
-                                    <name>Dhcp Service</name>
+                                    <name>DHCP Service</name>
                                 </application>
                             </applications>
                             <valuemap/>
@@ -268,7 +268,7 @@
                             <inventory_link>0</inventory_link>
                             <applications>
                                 <application>
-                                    <name>Dhcp Service</name>
+                                    <name>DHCP Service</name>
                                 </application>
                             </applications>
                             <valuemap/>
@@ -328,7 +328,7 @@
                             <inventory_link>0</inventory_link>
                             <applications>
                                 <application>
-                                    <name>Dhcp Service</name>
+                                    <name>DHCP Service</name>
                                 </application>
                             </applications>
                             <valuemap/>
@@ -388,7 +388,7 @@
                             <inventory_link>0</inventory_link>
                             <applications>
                                 <application>
-                                    <name>Dhcp Service</name>
+                                    <name>DHCP Service</name>
                                 </application>
                             </applications>
                             <valuemap/>
@@ -448,7 +448,7 @@
                             <inventory_link>0</inventory_link>
                             <applications>
                                 <application>
-                                    <name>Dhcp Service</name>
+                                    <name>DHCP Service</name>
                                 </application>
                             </applications>
                             <valuemap/>
@@ -508,7 +508,7 @@
                             <inventory_link>0</inventory_link>
                             <applications>
                                 <application>
-                                    <name>Dhcp Service</name>
+                                    <name>DHCP Service</name>
                                 </application>
                             </applications>
                             <valuemap/>
@@ -568,7 +568,7 @@
                             <inventory_link>0</inventory_link>
                             <applications>
                                 <application>
-                                    <name>Dhcp Service</name>
+                                    <name>DHCP Service</name>
                                 </application>
                             </applications>
                             <valuemap/>
@@ -628,7 +628,7 @@
                             <inventory_link>0</inventory_link>
                             <applications>
                                 <application>
-                                    <name>Dhcp Service</name>
+                                    <name>DHCP Service</name>
                                 </application>
                             </applications>
                             <valuemap/>
@@ -662,7 +662,7 @@
                             <expression>{Template App DHCP Service:dhcp.lease[{#RANGE},free].last(0)}&lt;={#TOTAL}*5/100</expression>
                             <recovery_mode>0</recovery_mode>
                             <recovery_expression/>
-                            <name>Dhcp: {#NAME} run out free leases</name>
+                            <name>DHCP: {#NAME} ran out free leases</name>
                             <correlation_mode>0</correlation_mode>
                             <correlation_tag/>
                             <url/>
@@ -686,7 +686,7 @@
                     </trigger_prototypes>
                     <graph_prototypes>
                         <graph_prototype>
-                            <name>Dhcp leases {#NAME}</name>
+                            <name>DHCP leases {#NAME}</name>
                             <width>900</width>
                             <height>200</height>
                             <yaxismin>0.0000</yaxismin>
