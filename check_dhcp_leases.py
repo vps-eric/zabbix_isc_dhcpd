@@ -1,6 +1,7 @@
 #!/bin/python3
 
 from netaddr import iter_iprange
+from dotenv import load_dotenv
 import argparse
 import itertools
 import json
@@ -9,7 +10,7 @@ import pypureomapi
 import re
 import sys
 
-DHCP_CONF = '/usr/pkg/etc/dhcp/dhcpd.conf' if os.path.isfile('/usr/pkg/etc/dhcp/dhcpd.conf') else '/etc/dhcp/dhcpd.conf'
+load_dotenv()
 leases_states = {
     1: 'free',
     2: 'active',
@@ -23,15 +24,15 @@ leases_states = {
 }
 
 class OMAPI:
-    KEYNAME = 'defomapi'
-    BASE64_ENCODED_KEY = '6h54k4gpHqzTLtNo2ZKZUKLWc5ugjMGXUkdYe05I3qMdESyRhuIu13wKDHcgVY3D+kwYUIlR0AZRYmDRso3hqg=='
-    ip = '127.0.0.1'
-    port = 7911
-    OMAPI_OP_UPDATE = 3
+    KEYNAME = os.getenv('KEYNAME')
+    BASE64_ENCODED_KEY = os.getenv('BASE64_ENCODED_KEY')
+    IP = os.getenv('IP')
+    Port = int(os.getenv('Port'))
+    OMAPI_OP_UPDATE = int(os.getenv('OMAPI_OP_UPDATE'))
     def __init__(self):
         self.conn = pypureomapi.Omapi(
-            self.ip,
-            self.port,
+            self.IP,
+            self.Port,
             self.KEYNAME.encode('utf_8'),
             self.BASE64_ENCODED_KEY.encode('utf_8')
         )
@@ -49,7 +50,7 @@ class Ranges:
         reg_range = re.compile('range\s(.*?);')
         reg_name = re.compile('#= (.*?) =#')
         ranges = []
-        with open(DHCP_CONF, 'r') as f:
+        with open(os.getenv('DHCP_CONF'), 'r') as f:
             for key, group in itertools.groupby(f, lambda line: line.startswith('\n')):
                 if not key:
                     subnet_info = list(group)
@@ -60,7 +61,7 @@ class Ranges:
                             ip_start = range.split(' ')[0]
                             ip_end = range.split(' ')[1]
                             ips = list(iter_iprange(ip_start, ip_end, step=1))
-                            myname = 'IP Range {0}'.format(str(num))
+                            myname = '{0}-{1}'.format(ip_start, ip_end)
                             if num < len(name):
                                 myname = name[num]
                             ranges.append({'{#NAME}': myname, '{#RANGE}': '{0}-{1}'.format(ip_start, ip_end), '{#TOTAL}': len(ips)})
