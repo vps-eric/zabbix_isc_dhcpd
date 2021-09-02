@@ -2,13 +2,8 @@
 
 from netaddr import iter_iprange
 from dotenv import load_dotenv
-import argparse
-import itertools
-import json
 import os
 import pypureomapi
-import re
-import sys
 
 load_dotenv()
 leases_states = {
@@ -45,106 +40,28 @@ class OMAPI:
         else:
             return ord(response.obj[0][1][-1:])
 
-class Ranges:
-    def discover():
-        reg_range = re.compile('range\s(.*?);')
-        reg_name = re.compile('#= (.*?) =#')
-        ranges = []
-        with open(os.getenv('DHCP_CONF'), 'r') as f:
-            for key, group in itertools.groupby(f, lambda line: line.startswith('\n')):
-                if not key:
-                    subnet_info = list(group)
-                    name = [m.group(1) for l in subnet_info for m in [reg_name.search(l)] if m]
-                    range_list = [m.group(1) for l in subnet_info for m in [reg_range.search(l)] if m]
-                    if range_list:
-                        for num, range in enumerate(range_list):
-                            ip_start = range.split(' ')[0]
-                            ip_end = range.split(' ')[1]
-                            ips = list(iter_iprange(ip_start, ip_end, step=1))
-                            myname = '{0}-{1}'.format(ip_start, ip_end)
-                            if num < len(name):
-                                myname = name[num]
-                            ranges.append({'{#NAME}': myname, '{#RANGE}': '{0}-{1}'.format(ip_start, ip_end), '{#TOTAL}': len(ips)})
-        ranges_dict = {}
-        ranges_dict['data'] = ranges
-        return ranges_dict
 
-    def check(ipsList, ip_type):
-        ip_start = ipsList.split('-')[0]
-        ip_end = ipsList.split('-')[1]
-        ips = list(iter_iprange(ip_start, ip_end, step=1))
-        results = {
-            'Total': len(ips),
-            'free': 0,
-            'active': 0,
-            'expired': 0,
-            'abandoned': 0,
-            'reset': 0,
-            'backup': 0,
-            'reserved': 0,
-            'bootp': 0,
-            'released': 0
-        }
-        omapi= OMAPI()
-        for ip in ips:
-            state = omapi.get_lease_state(ip)
-            try:
-                results[leases_states[state]] += 1
-            except KeyError:
-                print ('ZBX_NOTSUPPORTED')
-        return (results[ip_type])
-
-parser = argparse.ArgumentParser(
-    prog="Zabbix Lease Reporting",
-    description="""
-    A simple reporting script for Zabbix to enable DHCP collection.
-    """,
-    epilog="""
-    Please remember to edit the omapi key and key name in the OMAPI class.
-    """,
-)
-parser.add_argument(
-    "-d",
-    "--discover",
-    help="The initial discovery script for zabbix to return the IP ranges, names, and total number of IPs.",
-    action="store_true"
-)
-parser.add_argument(
-    "-c",
-    "--check",
-    help="Check and IP range (as reported by the --discover option)",
-    action="store_true"
-)
-parser.add_argument(
-    "--range",
-    help="The range to check (written as: 192.168.1.2-192.168.1.254)",
-    type=str,
-    default=None
-)
-parser.add_argument(
-    "--state",
-    help="Get the number of leases in the specified range that are in this state.",
-    choices=[
-        "free",
-        "active",
-        "expired",
-        "released",
-        "abandoned",
-        "reset",
-        "backup",
-        "reserved",
-        "bootp"
-    ],
-    type=str,
-    default=None
-)
-args = parser.parse_args()
-
-if args.discover:
-    ranges = Ranges.discover()
-    print(json.dumps(ranges))
-elif args.check:
-    num_in_state = Ranges.check(args.range, args.state)
-    print(num_in_state)
-else:
-    print("No option selected")
+def check(ipsList, ip_type):
+    ip_start = ipsList.split('-')[0]
+    ip_end = ipsList.split('-')[1]
+    ips = list(iter_iprange(ip_start, ip_end, step=1))
+    results = {
+        'Total': len(ips),
+        'free': 0,
+        'active': 0,
+        'expired': 0,
+        'abandoned': 0,
+        'reset': 0,
+        'backup': 0,
+        'reserved': 0,
+        'bootp': 0,
+        'released': 0
+    }
+    omapi= OMAPI()
+    for ip in ips:
+        state = omapi.get_lease_state(ip)
+        try:
+            results[leases_states[state]] += 1
+        except KeyError:
+            print ('ZBX_NOTSUPPORTED')
+    return (results[ip_type], results['Total'])
