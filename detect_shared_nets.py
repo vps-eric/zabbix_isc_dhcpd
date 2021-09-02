@@ -161,6 +161,9 @@ def parse_isc_dhcp_config(path: str):
                 current_subnet.add_range(temp_range)
                 continue
 
+    if current_sn is not None and next((sn for sn in shared_nets if sn.name == current_sn.name), None) is None:
+        shared_nets.append(current_sn)
+
     return shared_nets
 
 
