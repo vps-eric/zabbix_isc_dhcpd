@@ -150,6 +150,9 @@ def parse_isc_dhcp_config(path: str):
                 current_sn = temp_sn
                 continue
 
+            if current_sn is None:
+                continue
+
             temp_subnet = Subnet.parse(line)
             if temp_subnet is not None:
                 current_sn.add_subnet(temp_subnet)
