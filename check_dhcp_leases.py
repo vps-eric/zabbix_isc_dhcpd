@@ -6,6 +6,8 @@ import os
 import pypureomapi
 
 load_dotenv()
+
+# See https://github.com/isc-projects/dhcp/blob/31e68e5e3b863a4859562e0bb808888d74af7497/server/dhcpd.8#L533
 leases_states = {
     1: 'free',
     2: 'active',
